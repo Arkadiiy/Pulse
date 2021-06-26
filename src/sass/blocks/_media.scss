@@ -24,7 +24,7 @@
         &__icons {
             margin: 0 auto;
             margin-top: 20px;
-            width: 320px;
+            width: 312px;
         }
         .button {
             &_main {
@@ -61,5 +61,47 @@
     .feed-form {
         margin: 0 auto;
         margin-top: 36px;
+    }
+    .carousel {
+        &__inner {
+            width: 70%;
+        }
+        .slick-slide {
+            img {
+                width: 100%;
+            }
+        }
+        .slick-dots {
+            li {
+                button {
+                    width: 15px;
+                    height: 15px;
+                }
+            }
+        }
+    }
+    .catalog {
+        .title {
+            font-size: 28px;
+        }
+        &__tabs {
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+        &__tab {
+            transform: none;
+            margin-bottom: 5px;
+            div {
+                transform: none;
+            }
+        }
+    }
+    .reviews {
+        &__item {
+            flex-direction: column;
+        }
+        &__descr {
+            width: 100%;
+        }
     }
 }
