@@ -32,4 +32,19 @@ $(document).ready(function(){
       }
       toggleSlide('.catalog-item__link');
       toggleSlide('.catalog-item__back');
+
+      // Modal
+
+      $('[data-modal=consultation]').on('click', function() { // кликаем на дата атрибут consultation
+        $('.overlay, #consultation').fadeIn('slow'); // выводим на экран элементы с классом .overlay, #consultation. Slow значит медленно
+      });
+      $('.modal__close').on('click', function() {
+        $('.overlay, #consultation, #thanks, #order').fadeOut('slow'); // То же самое что и выше, только fadeOut - значит закрывать (скрывать).
+      });
+      $('.button_mini').each(function(i) {
+        $(this).on('click', function() {
+            $('#order .modal__descr').text($('.catalog-item__subtitle').eq(i).text());
+            $('.overlay, #order').fadeIn('slow');
+        });
+      });
   });
