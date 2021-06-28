@@ -38,13 +38,95 @@ $(document).ready(function(){
       $('[data-modal=consultation]').on('click', function() { // кликаем на дата атрибут consultation
         $('.overlay, #consultation').fadeIn('slow'); // выводим на экран элементы с классом .overlay, #consultation. Slow значит медленно
       });
+
       $('.modal__close').on('click', function() {
         $('.overlay, #consultation, #thanks, #order').fadeOut('slow'); // То же самое что и выше, только fadeOut - значит закрывать (скрывать).
       });
+
       $('.button_mini').each(function(i) {
         $(this).on('click', function() {
             $('#order .modal__descr').text($('.catalog-item__subtitle').eq(i).text());
             $('.overlay, #order').fadeIn('slow');
         });
+      });
+
+      // Валидация форм
+
+      // $('#consultation-form').validate();  // Изначально скачиваем с jQuery validation файл jquery.validate.min.js, подключаем его в html!
+      // $('#consultation form').validate({   // Дальше берем id форм и прописываем валидацию
+      //   rules: {                           // здесь прописываем настройки
+      //     name: {
+      //       required: true,
+      //       minlength: 2
+      //     },                // Каждого отдельного inputa мы прописываем его name и значение required говорит что мы должны заполнить форму чтобы отправить.
+      //     phone: "required",
+      //     email: {
+      //       required: true,
+      //       email: true
+      //     }
+      //   },
+      //   messages: {
+      //     name: {
+      //       required: "Пожалуйста, введите свое имя",
+      //       minlength: jQuery.validator.format("Введите {0} символа!")
+      //     },
+      //     phone: "Пожалуйста, введите свой номер телефона",
+      //     email: {
+      //       required: "Пожалуйста, введите свою почту",
+      //       email: "Неправильно введен адрес почты"
+      //     }
+      //   }
+      // });
+      // $('#order form').validate();
+
+      function valideForms(form) {
+        $(form).validate({                   // Дальше берем id форм и прописываем валидацию
+          rules: {                           // здесь прописываем настройки
+          name: {
+              required: true,
+              minlength: 2
+            },                                // Каждого отдельного inputa мы прописываем его name и значение required говорит что мы должны заполнить форму чтобы отправить.
+          phone: "required",
+          email: {
+              required: true,
+              email: true
+            }
+          },
+          messages: {
+            name: {
+              required: "Пожалуйста, введите свое имя",
+              minlength: jQuery.validator.format("Введите {0} символа!")
+            },
+            phone: "Пожалуйста, введите свой номер телефона",
+            email: {
+              required: "Пожалуйста, введите свою почту",
+              email: "Неправильно введен адрес почты"
+            }
+          }
+        });
+      }
+      
+      valideForms('#consultation-form');
+      valideForms('#consultation form');
+      valideForms('#order form');
+
+      $('input[name=phone]').mask("+7 (999) 999-99-99");  // Маска ввода номера на сайте
+
+      // Отправка писем
+
+      $('form').submit(function(e) {     // Говорим когда формы будут подтверждаться, когда все валидации выполнены формы будут отправляться, когда это произошло я хочу выполнить действие прописывая функцию. У функции будет дополнительный аргумент (e) - ивент
+        e.preventDefault();              // Отменяет стандартное поведение браузера
+        $.ajax({
+          type: "POST",                  // Здесь мы говорим, хотим получить или отдать данные серверу, POST - отдавать
+          url: "../mailer/smart.php",
+          data: $(this).serialize()      // Мы отправляем данные и (this) говорит что если мы отправили вторую форму то с данными второй формы и работаем
+        }).done(function() {
+          $(this).find("input").val("");
+          $('#consultation, #order').fadeOut();
+          $('.ovarlay, #thanks').fadeIn('slow');
+
+          $('form').trigger('reset');
+        });    
+        return false;                     
       });
   });
